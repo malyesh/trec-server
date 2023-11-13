@@ -1,0 +1,36 @@
+{
+  "name": "trec-server",
+  "version": "1.0.0",
+  "description": "An application where users post reccomendations for specific tourist attractions and famous landmarks, giving their opinion about if its overrated or underrated, how much time a person needs there etc. so that when other people are looking to go on a trip they can get all their reccomendations in one spot, and even create their own on vacation!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon",
+    "migrate": "knex migrate:latest",
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
+    "seed": "knex seed:run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malyesh/trec-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/malyesh/trec-server/issues"
+  },
+  "homepage": "https://github.com/malyesh/trec-server#readme",
+  "dependencies": {
+    "axios": "^1.6.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "knex": "^3.0.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
