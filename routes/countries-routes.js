@@ -5,6 +5,6 @@ const countriesController = require('../controllers/countries-controller');
 apiBody = 'https://countriesnow.space/api/v0.1/countries';
 
 router.route('/').get(countriesController.index);
-router.route('/:country').get(countriesController.findOne);
+// router.route('/:country').get(countriesController.findOne);
 
 module.exports = router;

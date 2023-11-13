@@ -28,7 +28,7 @@ Two kinds of users will use this application
 
 ### Tech Stack
 
-HTML/SCSS, React, Node, Express, Axios, MySQL, Knex
+HTML/SCSS, React, Node, Express, Axios, MySQL, Knex, react-select library
 
 ### APIs
 
@@ -43,6 +43,7 @@ Create my own user and post tables in database
 - create post page - where the user can upload info to post to a landmark page
 
 ### Mockups
+
 ![pic1](https://github.com/malyesh/trec-client/assets/74512928/346fb558-0ca2-4bc8-9b59-d5c40f796b02) ![pic2](https://github.com/malyesh/trec-client/assets/74512928/aa1283d2-11d2-4537-8d63-2d6c4094c092)
 ![pic4](https://github.com/malyesh/trec-client/assets/74512928/19cb1d80-09a7-4e2c-a33e-cab53a4291ce)
 
@@ -79,9 +80,11 @@ Create a database with three tables -
 
 - get /countries => all countries from api
 - get /countries/:country/cities => cities from that country
-- get /countries/:country/cities/:city/landmarks => from database to get all the landmark options in that country, city
+- get /:country/:city/landmarks => from database to get all the landmark options in that country, city
 - get /landmarks/:landmark => all posts from that landmark
-- post /users/posts => post to a specific landmark
+- get /user => (nice to have) all info about the specific user for profile page
+- get /posts => (nice to have) page with all posts to scroll through
+- post /user/posts => post to a specific landmark
 
 ### Auth
 
