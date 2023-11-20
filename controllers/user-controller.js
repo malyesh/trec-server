@@ -36,7 +36,9 @@ const signUp = async (req, res) => {
     last_name,
     email,
     password: hashedPassword,
+    picture: '',
   };
+  // console.log(newUser);
 
   try {
     await knex('user').insert(newUser);

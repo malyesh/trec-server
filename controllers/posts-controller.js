@@ -1,4 +1,5 @@
 const knex = require('knex')(require('../knexfile'));
+const jwt = require('jsonwebtoken');
 
 const index = async (req, res) => {
   try {
@@ -43,32 +44,39 @@ const getOneLandmark = async (req, res) => {
 const add = async (req, res) => {
   const { caption, landmark_id, rating, user_id } = req.body;
 
-  // if (!req.headers.authorization) {
-  //   return res.status(401).send('Please login');
-  // }
+  // console.log(req.body);
+  if (!req.headers.authorization) {
+    return res.status(401).send('Please login');
+  }
+  // console.log(req.headers.authorization);
 
-  // const authHeader = req.headers.authorization;
-  // const authToken = authHeader.split(' ')[1];
+  const authHeader = req.headers.authorization;
+  const authToken = authHeader.split(' ')[1];
 
   //check if landmark and user exist
 
   try {
-    // const decoded = jwt.verify(authToken, process.env.SECRET_KEY);
-    // const user = await knex('user').where({ id: decoded.id }).first();
+    // console.log(authToken);
+    const decoded = jwt.verify(authToken, process.env.SECRET_KEY);
+    // console.log(decoded);
+    // console.log('id');
+    const user = await knex('user').where({ 'user.id': decoded.id }).first();
+
+    console.log(user);
 
     const newPost = {
       caption,
       landmark_id,
-      user_id: user_id,
+      user_id: user.id,
       rating,
-      // picture,
+      picture: '',
     };
 
     const addPost = await knex('post').insert(newPost);
-
-    const returnResponse = { id: addPost[0], ...addPost };
-
-    return res.status(201).json(returnResponse);
+    const postId = addPost[0];
+    console.log(postId);
+    // console.log(addPost);
+    return res.status(201).json(addPost);
   } catch (error) {
     res.status(500).json({
       message: `Unable to add post ${error}`,

@@ -33,7 +33,6 @@ const getAll = async (req, res) => {
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
       .join('user', 'post.user_id', '=', 'user.id')
       .where({ landmark_id: landmarkId });
-    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     return res.status(500).send(`Error retrieving posts about ${landmarkId}`);

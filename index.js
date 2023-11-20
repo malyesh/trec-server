@@ -11,6 +11,7 @@ const origin = process.env.CORS_ORIGIN;
 const SECRET_KEY = process.env.SECRET_KEY;
 
 app.use(cors());
+app.use(express.static('assets'));
 app.use((req, res, next) => {
   if (req.url === '/user' || req.url === '/user/posts') {
     // if (req.url === '/users/signup' || req.url === '/users/login') {
