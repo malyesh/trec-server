@@ -1,6 +1,10 @@
 const knex = require('knex')(require('../knexfile'));
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const busboy = require('connect-busboy');
+const fs = require('fs');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const index = async (req, res) => {
   if (!req.headers.authorization) {
@@ -23,29 +27,60 @@ const index = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  const { first_name, last_name, email, password } = req.body;
+  // const { first_name, last_name, email, password } = req.body;
 
-  if (!first_name || !last_name || !email || !password) {
-    return res.status(400).send('Please enter all required fields');
+  // if (!first_name || !last_name || !email || !password) {
+  //   return res.status(400).send('Please enter all required fields');
+  // }
+
+  const uploadDir = path.join(__dirname, '../assets');
+
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
   }
 
-  const hashedPassword = bcrypt.hashSync(password);
+  const formData = {};
 
-  const newUser = {
-    first_name,
-    last_name,
-    email,
-    password: hashedPassword,
-    picture: '',
-  };
-  // console.log(newUser);
+  req.pipe(req.busboy);
 
-  try {
-    await knex('user').insert(newUser);
-    res.status(201).send('Registration successful');
-  } catch (error) {
-    res.status(400).send('failed registration');
-  }
+  req.busboy.on('field', (fieldname, val) => {
+    formData[fieldname] = val;
+  });
+
+  req.busboy.on('file', (fieldname, file, filename) => {
+    // if (filename) {
+    const saveTo = path.join(uploadDir, filename.filename);
+
+    formData.picture = filename.filename;
+
+    file.pipe(fs.createWriteStream(saveTo));
+
+    file.on('end', () => {
+      console.log(`File saved to ${saveTo}`);
+    });
+    // }
+  });
+
+  req.busboy.on('finish', async () => {
+    const hashedPassword = bcrypt.hashSync(formData.password);
+
+    const newUser = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      email: formData.email,
+      password: hashedPassword,
+      picture: formData.picture ? formData.picture : '',
+    };
+    console.log(newUser);
+
+    try {
+      const addUser = await knex('user').insert(newUser);
+      res.status(201).json(addUser);
+    } catch (error) {
+      res.status(400).send('failed registration');
+    }
+    // res.status(200).send('User created successfully');
+  });
 };
 
 const login = async (req, res) => {
@@ -80,7 +115,6 @@ const getAll = async (req, res) => {
 
   const authHeader = req.headers.authorization;
   const authToken = authHeader.split(' ')[1];
-  // console.log(authHeader);
 
   try {
     const decoded = jwt.verify(authToken, process.env.SECRET_KEY);
@@ -95,9 +129,8 @@ const getAll = async (req, res) => {
       .from('post')
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
       .join('user', 'post.user_id', '=', 'user.id')
-      .where({ 'user.id': decoded.id });
-    // .orderBy('post.created_at', 'asc');
-    // console.log(data);
+      .where({ 'user.id': decoded.id })
+      .orderBy('post.created_at', 'desc');
     return res.status(200).json(posts);
   } catch (error) {
     return res.status(401).send('Invalid auth token');

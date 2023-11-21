@@ -17,9 +17,9 @@ const index = async (req, res) => {
       .from('post')
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
       .join('user', 'post.user_id', '=', 'user.id')
-      .whereNotNull('post.caption');
-    // .orderBy('post.created_at', 'asc');
-    console.log(data);
+      .whereNotNull('post.caption')
+      .orderBy('post.created_at', 'desc');
+    // console.log(data);
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).send(`Error retrieving posts: ${error}`);
@@ -41,6 +41,7 @@ const getOneLandmark = async (req, res) => {
       .where('landmark.country', req.params.country)
       .where('landmark.city', req.params.city)
       .where('landmark.id', req.params.landmarkId);
+    // .orderBy('post.created_at', 'desc');
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).send(`Error retrieving posts: ${error}`);
@@ -59,7 +60,6 @@ const add = async (req, res) => {
 
   const uploadDir = path.join(__dirname, '../assets');
 
-  // Ensure the upload directory exists
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
   }
@@ -69,7 +69,6 @@ const add = async (req, res) => {
   req.pipe(req.busboy);
 
   req.busboy.on('field', (fieldname, val) => {
-    // Collect form fields
     formData[fieldname] = val;
   });
 
@@ -98,8 +97,6 @@ const add = async (req, res) => {
         rating: parseInt(formData.rating),
         picture: formData.picture,
       };
-
-      console.log(newPost);
 
       const addPost = await knex('post').insert(newPost);
       const postId = addPost[0];
