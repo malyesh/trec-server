@@ -6,17 +6,20 @@ const countriesRoute = require('./routes/countries-routes');
 const landmarksRoute = require('./routes/landmarks-routes');
 const userRoute = require('./routes/user-routes');
 const postRoute = require('./routes/posts-routes');
+const busboy = require('connect-busboy');
+const fs = require('fs');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const origin = process.env.CORS_ORIGIN;
 const SECRET_KEY = process.env.SECRET_KEY;
 
 app.use(cors());
 app.use(express.static('assets'));
+app.use(busboy());
+app.use(bodyParser.json());
 app.use((req, res, next) => {
   if (req.url === '/user' || req.url === '/user/posts') {
-    // if (req.url === '/users/signup' || req.url === '/users/login') {
-    //   next();
-    // } else
     if (!req.headers.authorization) {
       return res.status(403).json({ error: 'No token. Unauthorized.' });
     }

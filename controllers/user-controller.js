@@ -80,6 +80,7 @@ const getAll = async (req, res) => {
 
   const authHeader = req.headers.authorization;
   const authToken = authHeader.split(' ')[1];
+  // console.log(authHeader);
 
   try {
     const decoded = jwt.verify(authToken, process.env.SECRET_KEY);
@@ -95,6 +96,8 @@ const getAll = async (req, res) => {
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
       .join('user', 'post.user_id', '=', 'user.id')
       .where({ 'user.id': decoded.id });
+    // .orderBy('post.created_at', 'asc');
+    // console.log(data);
     return res.status(200).json(posts);
   } catch (error) {
     return res.status(401).send('Invalid auth token');
