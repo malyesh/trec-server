@@ -12,14 +12,14 @@ const index = async (req, res) => {
         'post.*',
         'landmark.landmark_name',
         'user.first_name',
-        'user.last_name'
+        'user.last_name',
+        'user.picture as profile'
       )
       .from('post')
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
       .join('user', 'post.user_id', '=', 'user.id')
       .whereNotNull('post.caption')
       .orderBy('post.created_at', 'desc');
-    // console.log(data);
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).send(`Error retrieving posts: ${error}`);

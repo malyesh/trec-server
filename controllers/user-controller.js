@@ -27,12 +27,6 @@ const index = async (req, res) => {
 };
 
 const signUp = async (req, res) => {
-  // const { first_name, last_name, email, password } = req.body;
-
-  // if (!first_name || !last_name || !email || !password) {
-  //   return res.status(400).send('Please enter all required fields');
-  // }
-
   const uploadDir = path.join(__dirname, '../assets');
 
   if (!fs.existsSync(uploadDir)) {
