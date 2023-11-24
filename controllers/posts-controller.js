@@ -33,15 +33,16 @@ const getOneLandmark = async (req, res) => {
         'post.*',
         'landmark.landmark_name',
         'user.first_name',
-        'user.last_name'
+        'user.last_name',
+        'user.picture as profile'
       )
       .from('post')
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
       .join('user', 'post.user_id', '=', 'user.id')
       .where('landmark.country', req.params.country)
       .where('landmark.city', req.params.city)
-      .where('landmark.id', req.params.landmarkId);
-    // .orderBy('post.created_at', 'desc');
+      .where('landmark.id', req.params.landmarkId)
+      .orderBy('post.created_at', 'desc');
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).send(`Error retrieving posts: ${error}`);
@@ -85,18 +86,19 @@ const add = async (req, res) => {
   });
 
   req.busboy.on('finish', async () => {
-    console.log(formData);
+    // console.log(formData);
 
     try {
       const user = await knex('user').where({ 'user.id': decoded.id }).first();
 
       const newPost = {
         caption: formData.caption,
-        landmark_id: parseInt(formData.landmark_id),
+        landmark_id: formData.landmark_id,
         user_id: user.id,
         rating: parseInt(formData.rating),
         picture: formData.picture,
       };
+      console.log(newPost);
 
       const addPost = await knex('post').insert(newPost);
       const postId = addPost[0];
@@ -107,12 +109,22 @@ const add = async (req, res) => {
       });
     }
 
-    res.status(200).send('Post created successfully');
+    // res.status(200).send('Post created successfully');
   });
+};
+
+const getOne = async (req, res) => {
+  try {
+    const data = await knex('post').where('post.id', req.params.postId);
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(500).send(`Error retrieving posts: ${error}`);
+  }
 };
 
 module.exports = {
   index,
   add,
   getOneLandmark,
+  getOne,
 };

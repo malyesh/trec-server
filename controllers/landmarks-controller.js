@@ -21,13 +21,15 @@ const getAll = async (req, res) => {
   // const countryId = req.params.countryId;
   // const cityId = req.params.cityId;
   const landmarkId = req.params.landmarkId;
+  console.log(landmarkId);
   try {
     const posts = await knex
       .select(
         'post.*',
         'landmark.landmark_name',
         'user.first_name',
-        'user.last_name'
+        'user.last_name',
+        'user.picture as profile'
       )
       .from('post')
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')

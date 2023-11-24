@@ -73,7 +73,6 @@ const signUp = async (req, res) => {
     } catch (error) {
       res.status(400).send('failed registration');
     }
-    // res.status(200).send('User created successfully');
   });
 };
 
@@ -118,7 +117,8 @@ const getAll = async (req, res) => {
         'post.*',
         'landmark.landmark_name',
         'user.first_name',
-        'user.last_name'
+        'user.last_name',
+        'user.picture as profile'
       )
       .from('post')
       .join('landmark', 'landmark.id', '=', 'post.landmark_id')
@@ -131,9 +131,39 @@ const getAll = async (req, res) => {
   }
 };
 
+const favorites = async (req, res) => {
+  if (!req.headers.authorization) {
+    return res.status(401).send('Please login');
+  }
+  const authHeader = req.headers.authorization;
+  const authToken = authHeader.split(' ')[1];
+  const decoded = jwt.verify(authToken, process.env.SECRET_KEY);
+
+  try {
+    const data = await knex
+      .select(
+        'post.*',
+        'landmark.landmark_name',
+        'user.first_name',
+        'user.last_name',
+        'user.picture as profile'
+      )
+      .from('post')
+      .join('landmark', 'landmark.id', '=', 'post.landmark_id')
+      .join('user', 'post.user_id', '=', 'user.id')
+      .join('favorite', 'favorite.post_id', '=', 'post.id')
+      .where({ 'favorite.user_id': decoded.id })
+      .orderBy('post.created_at', 'desc');
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(500).send(`Error retrieving posts: ${error}`);
+  }
+};
+
 module.exports = {
   index,
   signUp,
   login,
   getAll,
+  favorites,
 };
