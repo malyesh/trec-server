@@ -26,7 +26,6 @@ const favorite = async (req, res) => {
 
 const isFavorited = async (req, res) => {
   const postId = req.params.postId;
-  // console.log(postId);
 
   if (!req.headers.authorization) {
     return res.status(401).send('Please login');
