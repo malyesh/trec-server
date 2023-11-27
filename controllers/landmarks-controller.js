@@ -17,11 +17,7 @@ const index = async (req, res) => {
 };
 
 const getAll = async (req, res) => {
-  // const landmark = req.params.landmark;
-  // const countryId = req.params.countryId;
-  // const cityId = req.params.cityId;
   const landmarkId = req.params.landmarkId;
-  console.log(landmarkId);
   try {
     const posts = await knex
       .select(

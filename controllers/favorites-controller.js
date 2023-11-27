@@ -16,7 +16,6 @@ const favorite = async (req, res) => {
     post_id: post_id,
   };
   try {
-    console.log(favPost);
     const addFav = await knex('favorite').insert(favPost);
     return res.status(201).json(addFav);
   } catch (error) {

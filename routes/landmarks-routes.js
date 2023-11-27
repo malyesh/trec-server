@@ -6,6 +6,5 @@ apiBody = process.env.API_URL;
 
 router.route('/:landmarkId').get(landmarksController.getAll);
 router.route('/:countryId/:cityId').get(landmarksController.index);
-// router.route('/:countryId/:cityId/:landmarkId').get(landmarksController.getOne);
 
 module.exports = router;

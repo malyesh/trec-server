@@ -42,7 +42,6 @@ const signUp = async (req, res) => {
   });
 
   req.busboy.on('file', (fieldname, file, filename) => {
-    // if (filename) {
     const saveTo = path.join(uploadDir, filename.filename);
 
     formData.picture = filename.filename;
@@ -52,7 +51,6 @@ const signUp = async (req, res) => {
     file.on('end', () => {
       console.log(`File saved to ${saveTo}`);
     });
-    // }
   });
 
   req.busboy.on('finish', async () => {
@@ -65,7 +63,6 @@ const signUp = async (req, res) => {
       password: hashedPassword,
       picture: formData.picture ? formData.picture : '',
     };
-    console.log(newUser);
 
     try {
       const addUser = await knex('user').insert(newUser);

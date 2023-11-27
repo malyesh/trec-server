@@ -1,8 +1,6 @@
-// const axios = require('axios');
 const knex = require('knex')(require('../knexfile'));
 
 const index = async (_req, res) => {
-  console.log('get all countries');
   try {
     const countries = await knex.select('id', 'country_name').from('country');
     res.status(200).json(countries);
@@ -13,7 +11,6 @@ const index = async (_req, res) => {
 
 const findOne = async (req, res) => {
   const { countryId } = req.params;
-  console.log(`get all cities in country with id ${countryId}`);
   try {
     const cities = await knex
       .select('city_name', 'id')
