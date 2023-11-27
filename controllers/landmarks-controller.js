@@ -37,26 +37,7 @@ const getAll = async (req, res) => {
   }
 };
 
-// const getOne = async (req, res) => {
-//   const countryId = req.params.countryId;
-//   const cityId = req.params.cityId;
-//   const nameId= req.params.nameId;
-//   try {
-//     const landmarkId = await knex.select('id').from('landmark').where({
-//       country: country,
-//       city: city,
-//       landmark_name: name,
-//     });
-//     res.status(200).json(landmarkId);
-//   } catch (error) {
-//     return res
-//       .status(500)
-//       .send(`Error retrieving ${name} in ${city}, ${country}`);
-//   }
-// };
-
 module.exports = {
   index,
   getAll,
-  // getOne,
 };
