@@ -78,7 +78,12 @@ npx knex migrate:latest
 Seed data into the tables
 
 ```bash
-npx knex seed:run
+npx knex seed:run --specific=countries.js
+npx knex seed:run --specific=cities.js
+npx knex seed:run --specific=landmarks.js
+npx knex seed:run --specific=users.js
+npx knex seed:run --specific=posts.js
+npx knex seed:run --specific=favorites.js
 ```
 
 Start the server

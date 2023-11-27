@@ -94,8 +94,31 @@ const getOne = async (req, res) => {
   }
 };
 
+const remove = async (req, res) => {
+  const postId = req.params.postId;
+  // console.log(postId);
+
+  try {
+    const rowDeleted = await knex('post').where('id', postId).delete();
+
+    if (rowDeleted === 0) {
+      return res
+        .status(404)
+        .json({ message: `Post with ID ${postId} not found` });
+    }
+    return res.status(204).json({
+      message: `Successfully deleted post with ID ${postId}`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to delete post ${error}`,
+    });
+  }
+};
+
 module.exports = {
   index,
   add,
   getOne,
+  remove,
 };
