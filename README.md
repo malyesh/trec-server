@@ -1,10 +1,10 @@
-# TRec
+# TravelRec
 
-### _Create and see the best travel reccomendations!_
+### _Create and see the best travel recommendations!_
 
 ## Overview
 
-An application where users post reccomendations for specific tourist attractions and famous landmarks, giving their opinion about if its overrated or underrated, how much time a person needs there etc. so that when other people are looking to go on a trip they can get all their reccomendations in one spot, and even create their own on vacation!
+An application where users post recommendations for specific tourist attractions and famous landmarks, giving their opinion about if its overrated or underrated, how much time a person needs there etc. so that when other people are looking to go on a trip they can get all their recommendations in one spot, and even create their own on vacation!
 
 ## Problem
 
