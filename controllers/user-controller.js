@@ -150,7 +150,7 @@ const favorites = async (req, res) => {
       .join('user', 'post.user_id', '=', 'user.id')
       .join('favorite', 'favorite.post_id', '=', 'post.id')
       .where({ 'favorite.user_id': decoded.id })
-      .orderBy('post.created_at', 'desc');
+      .orderBy('favorite.created_at', 'desc');
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).send(`Error retrieving posts: ${error}`);
