@@ -4,6 +4,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const countriesRoute = require('./routes/countries-routes');
 const landmarksRoute = require('./routes/landmarks-routes');
+const citiesRoute = require('./routes/cities-routes');
 const userRoute = require('./routes/user-routes');
 const favoritesRoute = require('./routes/favorites-routes');
 const postRoute = require('./routes/posts-routes');
@@ -52,6 +53,7 @@ app.use('/user', userRoute);
 app.use('/countries', countriesRoute);
 app.use('/landmarks', landmarksRoute);
 app.use('/favorites', favoritesRoute);
+app.use('/cities', citiesRoute);
 
 app.listen(8080, function () {
   console.log('running on port 8080');

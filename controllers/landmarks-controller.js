@@ -38,7 +38,71 @@ const getAll = async (req, res) => {
   }
 };
 
+const bySearch = async (req, res) => {
+  const search = req.params.search;
+
+  try {
+    const country = await knex('country').where({ country_name: search });
+    if (country.length > 0) {
+      try {
+        const landmarks = await knex
+          .select('landmark.*', 'country.country_name', 'city.city_name')
+          .from('landmark')
+          .join('country', 'country.id', '=', 'landmark.country_id')
+          .join('city', 'city.id', '=', 'landmark.city_id')
+          .where({ 'landmark.country_id': country[0].id });
+        return res.status(200).json(landmarks);
+      } catch (e) {
+        return res.status(500).send(`Error retrieving country landmarks`);
+      }
+    } else {
+      const city = await knex('city').where({ city_name: search });
+      if (city.length > 0) {
+        try {
+          const landmarks = await knex
+            .select('landmark.*', 'country.country_name', 'city.city_name')
+            .from('landmark')
+            .join('country', 'country.id', '=', 'landmark.country_id')
+            .join('city', 'city.id', '=', 'landmark.city_id')
+            .where({
+              'landmark.city_id': city[0].id,
+            });
+          return res.status(200).json(landmarks);
+        } catch (e) {
+          return res.status(500).send(`Error retrieving city landmarks`);
+        }
+      } else {
+        try {
+          const landmarks = await knex
+            .select('landmark.*', 'country.country_name', 'city.city_name')
+            .from('landmark')
+            .join('country', 'country.id', '=', 'landmark.country_id')
+            .join('city', 'city.id', '=', 'landmark.city_id')
+            .whereILike('landmark_name', `%${search}%`);
+          return res.status(200).json(landmarks);
+        } catch (e) {
+          return res.status(500).send(`Error retrieving landmark`);
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  res.status(200).json(searchBy);
+};
+
+const all = async (req, res) => {
+  try {
+    const landmarks = await knex('landmark');
+    res.status(200).json(landmarks);
+  } catch (error) {
+    return res.status(500).send(`Error retrieving landmarks`);
+  }
+};
+
 module.exports = {
   index,
   getAll,
+  bySearch,
+  all,
 };
